@@ -10,16 +10,13 @@ import logging.handlers
 import wallet
 import util
 
+from conf import BOT_VERSION, DEPOSIT_CHECK_JOB
 
 logging.basicConfig(filename='bot.log', level=logging.INFO)
 
 logger = logging.getLogger("bot-main")
 
 AT_BOT = "<@" + os.environ.get('BOT_ID') + ">"
-
-BOT_VERSION = "0.4.5"
-
-DEPOSIT_CHECK_JOB = 60.0  # seconds
 
 CMD_HELP = "!help"
 CMD_BALANCE = "!balance"
@@ -44,22 +41,22 @@ general_responses = {
         ],
     "new_deposit_unconfirmed":
         [
-            "I received a new deposit (%.3f XZC) :ok_hand: Waiting for 1 more confirmation" +
+            "I received a new deposit (%.3f PPC) :ok_hand: Waiting for 1 more confirmation" +
             " before you can start using the coins. I will let you know when your funds are confirmed.",
-            "I got the %.3f XZC you sent me :ok_hand: Just waiting for a confirmation. " +
+            "I got the %.3f PPC you sent me :ok_hand: Just waiting for a confirmation. " +
             "I'll send you a message when that happens.",
-            "Wow ! I got %.3f XZC from you. Wait a moment so I receive one confirmation. " +
+            "Wow ! I got %.3f PPC from you. Wait a moment so I receive one confirmation. " +
             "I'll tell you when your coins are confirmed."
         ],
     "new_deposit_confirmed":
         [
-            "Your deposit (%.3f XZC) is added and confirmed ! Coins are now usable with your wallet.",
-            "Deposit (%.3f XZC) is now confirmed :sunglasses: ! Tip happily."
+            "Your deposit (%.3f PPC) is added and confirmed ! Coins are now usable with your wallet.",
+            "Deposit (%.3f PPC) is now confirmed :sunglasses: ! Tip happily."
         ],
     "deposit_confirmed":
         [
-            "Your deposit (%.3f XZC) is now confirmed ! :sunglasses:",
-            "Confirmed ! %.3f XZC was added to your account. :muscle:"
+            "Your deposit (%.3f PPC) is now confirmed ! :sunglasses:",
+            "Confirmed ! %.3f PPC was added to your account. :muscle:"
         ]
 }
 
@@ -69,13 +66,10 @@ def setup_bot():
                               command_keywords=["!help", "!man"],
                               response_templates=
                               {"success": [
-                                  "ZTipBot v%s - Zcoin's tip bot for Discord \n" +
-                                  "Developed by <@375265605080842241> - feel free to give me feedback \n" +
+                                  "TippBot v%s - tip bot for Discord \n" +
                                   "\n" +
-                                  ":small_orange_diamond: You can tag me in a channel or send me a direct message"
-                                  " to engage with me. \n\n"
                                   ":small_orange_diamond: You can phrase your commands anyway you like, for example"
-                                  " '!tip 2 xzc to @daniel' and 'i command you to !tip @daniel an amount of 2' are"
+                                  " '!tip 2 PPC to @daniel' and 'I command you to !tip @daniel an amount of 2' are"
                                   " equal. I'll let you know if I can't find what I'm looking for. \n\n"
                                   "Supported commands are:\n " +
                                   "\n" +
@@ -109,9 +103,9 @@ def setup_bot():
                                  command_keywords=["!balance", "!wallet"],
                                  response_templates=
                                  {"success": [
-                                     "Balance: %.3f XZC",
-                                     "You have %.3f XZC. Spend wisely ! :wink: ",
-                                     "You've got %.3f XZC."
+                                     "Balance: %.3f PPC",
+                                     "You have %.3f PPC. Spend wisely ! :wink: ",
+                                     "You've got %.3f PPC."
                                  ]})
 
     deposit_feature = BotFeature(command="DEPOSIT",
@@ -149,7 +143,7 @@ def setup_bot():
                                  "Something went wrong with the tip. I wrote to logs. :thermometer_face: "
                              ], "tip_received": [
                                  "You were tipped %.3f by <@%s> ! Your account was funded. :muscle: ",
-                                 "%.3f XZC was tipped to you by <@%s> ! You can tip other users or withdraw your coins."
+                                 "%.3f PPC was tipped to you by <@%s> ! You can tip other users or withdraw your coins."
                              ], "cant_tip_yourself": [
                                  ":thinking: :thinking: :thinking: You can't tip yourself !"
                              ], "cant_tip_bot": [
@@ -170,9 +164,9 @@ def setup_bot():
                                   ], "error": [
                                       "Something went wrong ! :thermometer_face: "
                                   ], "threshold": [
-                                      "You do not have a minimum of 0.01 XZC !",
-                                      "Minimum withdraw amount is 0.01 XZC !",
-                                      "Uh I'm sorry :sweat: ... Minimum withdrawal amount is 0.01 XZC"
+                                      "You do not have a minimum of 0.01 PPC !",
+                                      "Minimum withdraw amount is 0.01 PPC !",
+                                      "Uh I'm sorry :sweat: ... Minimum withdrawal amount is 0.01 PPC"
                                   ]})
 
     top_feature = BotFeature(command="TOP",
@@ -186,13 +180,6 @@ def setup_bot():
                                  "No tips yet ! why not be the first to tip ? :thinking: "
                              ]})
 
-    # todo
-    ask_feature = BotFeature(command="ASK",
-                             command_keywords=["!ask", "!demand", "!sendme", "!tipme", "!giveme"],
-                             response_templates=
-                             {"success": [
-                                 "Hmmm"
-                             ]})
 
     return [help_feature, balance_feature, deposit_feature, tip_feature, withdraw_feature, top_feature]
 
@@ -275,7 +262,7 @@ async def handle_message(message):
             else:
                 response = random.choice(feat.response_templates["header"]) + "\n"
                 for top_user in top_users:
-                    response += '\n %s %.3f XZC tipped by %s' % (util.get_numerical_emoji(top_user['index']),
+                    response += '\n %s %.3f PPC tipped by %s' % (util.get_numerical_emoji(top_user['index']),
                                                                  top_user['amount'], top_user['name'])
                     if top_user['index'] == 1:
                         response += ' :clap: :clap: '

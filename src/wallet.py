@@ -1,26 +1,25 @@
 from bitcoinrpc.authproxy import AuthServiceProxy
 
 import util
-import os
 import db
 import datetime
 import logging
+from conf import (RPC_PORT,
+                  RPC_USER,
+                  RPC_PASSWORD
+)
 
 logging.basicConfig(filename='bot.log', level=logging.INFO)
 
 MIN_CONFIRMATIONS_FOR_DEPOSIT = 2
-
 TOP_USERS_COUNT = 10
-
-rpc_user = os.environ.get("RPC_USER")
-rpc_password = os.environ.get("RPC_PASSWORD")
 
 logger = logging.getLogger("bot-wallet")
 # logger_rpc = util.get_logger('BitcoinRPC')
 
 
 def connect():
-    return AuthServiceProxy("http://%s:%s@127.0.0.1:8332" % (rpc_user, rpc_password))
+    return AuthServiceProxy(f"http://{RPC_USER}:{RPC_PASSWORD}@127.0.0.1:{RPC_PORT}")
 
 
 def create_or_fetch_user(user_id, user_name):
