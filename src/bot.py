@@ -1,4 +1,3 @@
-import os
 import collections
 import random
 import re
