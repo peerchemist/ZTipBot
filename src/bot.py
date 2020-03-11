@@ -347,6 +347,12 @@ async def check_for_deposit():
 
 @client.event
 async def on_ready():
+
+    print('Logged in as')
+    print(client.user.name)
+    print(client.user.id)
+    print('------')
+
     logger.info('connected as %s and id %s', client.user.name, client.user.id)
     asyncio.get_event_loop().create_task(check_for_deposit())
 
