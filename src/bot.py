@@ -363,11 +363,12 @@ async def on_message(message):
         return
 
     if AT_BOT in message.content or isinstance(message.channel, discord.abc.PrivateChannel):
+
         try:
             if not isinstance(message.channel, discord.abc.PrivateChannel):
                 message.content = message.content.replace(AT_BOT, '', 1)
-            #await client.send_typing(message.channel)
             await handle_message(message)
+
         except socket_error as serr:
             if serr.errno != errno.ECONNREFUSED:
                 raise serr
