@@ -1,0 +1,32 @@
+version: '3.5'
+services:
+  peercoind:
+    image: peercoin/peercoind
+    restart: on-failure:20
+    volumes:
+        - /opt/tippbot/peercoin/:/data
+    ports:
+      - "19904:19904"
+    environment:
+      - RPC_USER=rpc
+      - RPC_PASSWORD=pass
+      - rpcallowip=0.0.0.0/0
+    command:
+      -nominting
+      -rpcport=19904
+  tippbot:
+    build: .
+    env_file:
+      - bot-variables.env
+    environment:
+      - RPC_HOST=peercoind
+      - RPC_PORT=19904
+      - RPC_USER=rpc
+      - RPC_PASSWORD=pass
+      - DB_NAME=tippbot.sqlite
+    restart: always
+    volumes:
+        - /opt/tippbot/db:/var/lib/tippbot/
+
+volumes:
+    ppcdata:
