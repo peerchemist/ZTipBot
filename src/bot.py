@@ -230,7 +230,7 @@ async def handle_message(message):
                 target_user_id = find_user_id(message.content)
                 if target_user_id == message.author.id:
                     post_response(message, feat.response_templates["cant_tip_yourself"])
-                elif target_user_id == os.environ.get('BOT_ID'):
+                elif target_user_id == BOT_ID:
                     post_response(message, feat.response_templates["cant_tip_bot"])
                 else:
                     target_user = await client.get_user_info(target_user_id)
