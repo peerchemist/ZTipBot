@@ -6,7 +6,8 @@ import datetime
 import logging
 from conf import (RPC_PORT,
                   RPC_USER,
-                  RPC_PASSWORD
+                  RPC_PASSWORD,
+                  RPC_HOST
 )
 
 logging.basicConfig(filename='bot.log', level=logging.INFO)
@@ -19,7 +20,7 @@ logger = logging.getLogger("bot-wallet")
 
 
 def connect():
-    return AuthServiceProxy(f"http://{RPC_USER}:{RPC_PASSWORD}@127.0.0.1:{RPC_PORT}")
+    return AuthServiceProxy(f"http://{RPC_USER}:{RPC_PASSWORD}@{RPC_HOST}:{RPC_PORT}")
 
 
 def create_or_fetch_user(user_id, user_name):
