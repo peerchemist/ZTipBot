@@ -54,21 +54,19 @@ def get_balance(user_id):
 
 
 def make_transaction_to_address(user, amount, address):
-    txfee = 0.0
-    commands = [["settxfee", txfee]]
+
     rpc_connection = connect()
+
+    commands = [["sendtoaddress", address, round(amount, 6), "tippbot withdraw"]]
     result = rpc_connection.batch_(commands)
-    if result[0]:
-        commands = [["sendtoaddress", address, round(amount - txfee, 3), "ztipbot withdraw"]]
-        result = rpc_connection.batch_(commands)
-        txid = result[0]
-        logger.info('creating withdraw transaction (user: %s, amount: %.3f, address: %s)', user.user_id,
-                    amount, address)
-        if db.create_withdraw_transaction(txid, amount, user):
-            logger.info('withdraw successful.')
-            return
-        else:
-            raise util.TipBotException("error")
+    txid = result[0]
+    logger.info('creating withdraw transaction (user: %s, amount: %.3f, address: %s)', user.user_id,
+                amount, address)
+    if db.create_withdraw_transaction(txid, amount, user):
+        logger.info('withdraw successful.')
+        return
+    else:
+        raise util.TipBotException("error")
 
 
 def get_top_users():
