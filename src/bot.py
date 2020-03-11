@@ -10,13 +10,17 @@ import logging.handlers
 import wallet
 import util
 
-from conf import BOT_VERSION, DEPOSIT_CHECK_JOB
+from conf import (BOT_VERSION,
+                  DEPOSIT_CHECK_JOB,
+                  BOT_ID,
+                  BOT_TOKEN
+)
 
 logging.basicConfig(filename='bot.log', level=logging.INFO)
 
 logger = logging.getLogger("bot-main")
 
-AT_BOT = "<@" + os.environ.get('BOT_ID') + ">"
+AT_BOT = "<@" + BOT_ID + ">"
 
 CMD_HELP = "!help"
 CMD_BALANCE = "!balance"
@@ -361,4 +365,4 @@ async def on_message(message):
             post_response(message, general_responses["wallet_down"])
 
 
-client.run(os.environ.get("TOKEN"))
+client.run(BOT_TOKEN)
