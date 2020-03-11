@@ -311,7 +311,7 @@ def find_user_id(input_text):
 def post_response(message, response_list, *args):
     response = random.choice(response_list) % tuple(args)
 
-    if not isinstance(message.channel, discord.abc.GuildChannel):
+    if not isinstance(message.channel, discord.abc.PrivateChannel):
         response = f"<@{message.author.id}>{response}"
 
     logger.info("sending response: '%s' to message: %s", response, message.content)
