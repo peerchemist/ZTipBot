@@ -1,6 +1,7 @@
 import datetime
 import logging
 from peewee import (SqliteDatabase,
+                    Model,
                     ForeignKeyField,
                     CharField,
                     FloatField,
