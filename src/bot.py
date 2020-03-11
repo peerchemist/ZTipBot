@@ -311,10 +311,12 @@ def find_user_id(input_text):
 
 def post_response(message, response_list, *args):
     response = random.choice(response_list) % tuple(args)
-    if not message.channel.is_private:
-        response = "<@" + message.author.id + "> " + response
+
+    if not isinstance(message.channel, discord.abc.GuildChannel):
+        response = f"<@{message.author.id}>{response}"
+
     logger.info("sending response: '%s' to message: %s", response, message.content)
-    asyncio.get_event_loop().create_task(client.send_message(message.channel, response))
+    asyncio.get_event_loop().create_task(message.channel.send(response))
 
 
 async def react_to_message(message, level):
@@ -352,11 +354,11 @@ async def on_ready():
 
 @client.event
 async def on_message(message):
-    if AT_BOT in message.content or (message.channel.is_private and message.author.id != client.user.id):
+    if AT_BOT in message.content or (not isinstance(message.channel, discord.abc.GuildChannel) and message.author.id != client.user.id):
         try:
-            if not message.channel.is_private:
+            if not isinstance(message.channel, discord.abc.GuildChannel):
                 message.content = message.content.replace(AT_BOT, '', 1)
-            await client.send_typing(message.channel)
+            #await client.send_typing(message.channel)
             await handle_message(message)
         except socket_error as serr:
             if serr.errno != errno.ECONNREFUSED:
