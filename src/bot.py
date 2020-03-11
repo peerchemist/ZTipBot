@@ -349,6 +349,7 @@ async def on_ready():
     print('Logged in as')
     print(client.user.name)
     print(client.user.id)
+    print(f"Don't @ me. {AT_BOT}")
     print('------')
 
     logger.info('connected as %s and id %s', client.user.name, client.user.id)
