@@ -186,7 +186,10 @@ bot_features = setup_bot()
 
 
 async def handle_message(message):
+    '''parsing message and deciding what to do with it'''
+
     features = [f for f in bot_features for c in f.command_keywords if c in message.content]
+
     if len(features) == 1:
         feat = features[0]
 
