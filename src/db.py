@@ -10,7 +10,7 @@ from peewee import (SqliteDatabase,
 
 from conf import DB_NAME
 
-db = SqliteDatabase(f'{DB_NAME}')
+db = SqliteDatabase(f'/var/lib/tippbot/{DB_NAME}')
 
 logging.basicConfig(filename='bot.log', level=logging.INFO)
 
