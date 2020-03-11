@@ -91,3 +91,6 @@ ENV/
 # mypy
 .mypy_cache
 cmcvol.csv
+
+# bot
+bot_variables.env
