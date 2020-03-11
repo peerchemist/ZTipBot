@@ -21,10 +21,6 @@ logger = logging.getLogger("bot-main")
 
 AT_BOT = f"<@{BOT_ID}>"
 
-CMD_HELP = "!help"
-CMD_BALANCE = "!balance"
-CMD_DEPOSIT = "!deposit"
-
 logger.info("started.")
 client = discord.Client()
 
