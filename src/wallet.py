@@ -27,7 +27,7 @@ def create_or_fetch_user(user_id, user_name):
     user = db.get_user_by_id(user_id)
     if user is None:
         logger.info('user %s does not exist. creating new user ...', user_id)
-        commands = [["getnewaddress"]]
+        commands = [["getnewaddress", "tippbot", "bech32"]]
         rpc_connection = connect()
         result = rpc_connection.batch_(commands)
         address = result[0]
