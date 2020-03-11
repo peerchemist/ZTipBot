@@ -10,7 +10,7 @@ if environ.get("APP_ENV") == "docker":
     RPC_HOST = environ.get("RPC_HOST", "")
     BOT_ID = environ.get("BOT_ID", "")
     BOT_TOKEN = environ.get("BOT_TOKEN", "")
-    DB_NAME = environ.get("DB_NAME", "tippbot.db")
+    DB_NAME = environ.get("DB_NAME", "/var/lib/tippbot/tippbot.db")
 
 else:
     RPC_PORT = environ.get("RPC_PORT", "9904")
