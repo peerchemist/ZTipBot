@@ -8,7 +8,9 @@ from peewee import (SqliteDatabase,
                     DateField
 )
 
-db = SqliteDatabase('ztipbot.db')
+from conf import DB_NAME
+
+db = SqliteDatabase(f'{DB_NAME}')
 
 logging.basicConfig(filename='bot.log', level=logging.INFO)
 
