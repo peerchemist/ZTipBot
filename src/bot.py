@@ -359,9 +359,14 @@ async def on_ready():
 
 @client.event
 async def on_message(message):
-    if AT_BOT in message.content or (not isinstance(message.channel, discord.abc.GuildChannel) and message.author.id != client.user.id):
+
+    # disregard messages sent by the bot
+    if message.author.id == client.user.id:
+        return
+
+    if AT_BOT in message.content or isinstance(message.channel, discord.abc.PrivateChannel):
         try:
-            if not isinstance(message.channel, discord.abc.GuildChannel):
+            if not isinstance(message.channel, discord.abc.PrivateChannel):
                 message.content = message.content.replace(AT_BOT, '', 1)
             #await client.send_typing(message.channel)
             await handle_message(message)
