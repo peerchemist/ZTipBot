@@ -93,4 +93,4 @@ ENV/
 cmcvol.csv
 
 # bot
-bot_variables.env
+bot-variables.env
