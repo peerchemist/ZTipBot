@@ -19,7 +19,7 @@ logging.basicConfig(filename='bot.log', level=logging.INFO)
 
 logger = logging.getLogger("bot-main")
 
-AT_BOT = "<@" + BOT_ID + ">"
+AT_BOT = f"<@{BOT_ID}>"
 
 CMD_HELP = "!help"
 CMD_BALANCE = "!balance"
