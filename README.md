@@ -1,34 +1,21 @@
-# ZTipBot
+# TippBot
 
-ZTipBot is a Discord tip bot for Zcoin. This bot was developed to allow our community in Discord to tip each other easily.
+TippBot is a Discord tip bot.
 
 ## Usage
 
-To run the bot you need python 3.4.2+. Dependencies can be installed with `pip`.
+The bot is designed to be deployed using docker.
 
-```
-pip3 install -r requirements.txt
-```
+Edit docker-compose.yml to tweak relevant settings like RPC_PORT and RPC_HOST. Data persistance is advised and is done via /opt/tippbot directory by default.
 
-Before running the bot set these environment variables:
+Bot needs BOT_ID and BOT_TOKEN variables, those are obtained from discord development portal and saved into `bot-variables.env` text file.
 
-```
-RPC_USER: Zcoin wallet's rpc user
-RPC_PASSWORD: Zcoin wallet's rpc password
-BOT_ID: Discord Bot ID
-TOKEN: Discord Bot Token
-```
+To run:
 
-Run the bot:
+> docker-compose -d
 
-```
-python3 bot.py
-```
+It should just work. If something goes wrong snoop around it's probably easy to fix.
 
-## Requirements
+## Tips:
 
-- Python 3.4.2+
-- Zcoin wallet with RPC enabled
-- `discord` library
-- `peewee` library
-- `python-bitcoinrpc` library
+> pc1qrsws36lt7k5l0m8ygvnlje5xmgwt2prwzj7eem
