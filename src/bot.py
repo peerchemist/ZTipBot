@@ -29,9 +29,9 @@ BotFeature = collections.namedtuple('BotFeature', ['command', 'command_keywords'
 general_responses = {
     "command_not_found":
         [
-            "I did not understand what you said :frowning: try !help",
-            "What ? :nerd: type !help if you are lost",
-            "Would you please rephrase that ? I didn't understand what you meant. You can see my manual with !help"
+            "I did not understand what you said :frowning: try $help",
+            "What ? :nerd: type $help if you are lost",
+            "Would you please rephrase that ? I didn't understand what you meant. You can see my manual with $help"
         ],
     "wallet_down":
         [
@@ -62,44 +62,44 @@ general_responses = {
 
 def setup_bot():
     help_feature = BotFeature(command="HELP",
-                              command_keywords=["!help", "!man"],
+                              command_keywords=["$help", "$man"],
                               response_templates=
                               {"success": [
                                   "TippBot v%s - tip bot for Discord \n" +
                                   "\n" +
                                   ":small_orange_diamond: You can phrase your commands anyway you like, for example"
-                                  " '!tip 2 PPC to @daniel' and 'I command you to !tip @daniel an amount of 2' are"
+                                  " '$tip 2 PPC to @daniel' and 'I command you to $tip @daniel an amount of 2' are"
                                   " equal. I'll let you know if I can't find what I'm looking for. \n\n"
                                   "Supported commands are:\n " +
                                   "\n" +
-                                  ":small_blue_diamond: !help !man \n" +
+                                  ":small_blue_diamond: $help $man \n" +
                                   "Show this message. \n"
                                   "\n" +
-                                  ":small_blue_diamond: !balance !wallet \n" +
+                                  ":small_blue_diamond: $balance $wallet \n" +
                                   "Tells you how much coins you've got. There are two ways your balance increases: "
                                   "(1) receiving tips and (2) depositing coins. \n" +
                                   "\n" +
-                                  ":small_blue_diamond: !deposit \n" +
+                                  ":small_blue_diamond: $deposit \n" +
                                   "Gives you an address (with QR code) to transfer your coins, so you can start"
                                   " tipping others. You will receive a message when your transaction is received"
                                   " and confirmed. \n" +
                                   "\n" +
-                                  ":small_blue_diamond: !send !tip \n" +
+                                  ":small_blue_diamond: $send $tip \n" +
                                   ":small_blue_diamond: needs: @who, amount \n" +
                                   "Tip other users. You have to tag who you want to tip and tell me the amount. " +
                                   "If the operation is successful, the other users is informed of your action. \n" +
                                   "\n" +
-                                  ":small_blue_diamond: !withdraw \n" +
+                                  ":small_blue_diamond: $withdraw \n" +
                                   ":small_blue_diamond: needs: address \n" +
                                   "Withdraw all of your coins to your wallet. You have to supply an " +
                                   "address for this. \n" +
                                   "\n" +
-                                  ":small_blue_diamond: !top !rank !leaderboard \n" +
+                                  ":small_blue_diamond: $top $rank $leaderboard \n" +
                                   "Show who has tipped the most. \n"
                               ]})
 
     balance_feature = BotFeature(command="BALANCE",
-                                 command_keywords=["!balance", "!wallet"],
+                                 command_keywords=["$balance", "$wallet"],
                                  response_templates=
                                  {"success": [
                                      "Balance: %.3f PPC",
@@ -108,7 +108,7 @@ def setup_bot():
                                  ]})
 
     deposit_feature = BotFeature(command="DEPOSIT",
-                                 command_keywords=["!deposit"],
+                                 command_keywords=["$deposit"],
                                  response_templates=
                                  {"success": [
                                      "Send your coins to %s please. I'll send you a message when I " +
@@ -122,7 +122,7 @@ def setup_bot():
                                  ]})
 
     tip_feature = BotFeature(command="TIP",
-                             command_keywords=["!send", "!tip"],
+                             command_keywords=["$send", "$tip"],
                              response_templates=
                              {"success": [
                                  "Tip successful ! Yay ! :blush: ",
@@ -151,7 +151,7 @@ def setup_bot():
                              ]})
 
     withdraw_feature = BotFeature(command="WITHDRAW",
-                                  command_keywords=["!withdraw"],
+                                  command_keywords=["$withdraw"],
                                   response_templates=
                                   {"success": [
                                       "Transaction complete !",
@@ -169,7 +169,7 @@ def setup_bot():
                                   ]})
 
     top_feature = BotFeature(command="TOP",
-                             command_keywords=["!top", "!rank", "!leaderboard"],
+                             command_keywords=["$top", "$rank", "$leaderboard"],
                              response_templates=
                              {"header": [
                                  "Tip Leaderboard :point_down:",
@@ -178,7 +178,6 @@ def setup_bot():
                                  "The leaderboard is empty ! :scream:",
                                  "No tips yet ! why not be the first to tip ? :thinking: "
                              ]})
-
 
     return [help_feature, balance_feature, deposit_feature, tip_feature, withdraw_feature, top_feature]
 
