@@ -19,8 +19,6 @@ logging.basicConfig(filename='bot.log', level=logging.INFO)
 
 logger = logging.getLogger("bot-main")
 
-AT_BOT = f"<@{BOT_ID}>"
-
 logger.info("started.")
 client = discord.Client()
 
@@ -185,96 +183,6 @@ def setup_bot():
 bot_features = setup_bot()
 
 
-async def handle_message(message):
-    '''parsing message and deciding what to do with it'''
-
-    features = [f for f in bot_features for c in f.command_keywords if c in message.content]
-
-    if len(features) == 1:
-        feat = features[0]
-
-        if feat.command == "HELP":
-            post_response(message, feat.response_templates["success"], BOT_VERSION)
-
-        elif feat.command == "BALANCE":
-            balance = wallet.get_balance(message.author.id)
-            post_response(message, feat.response_templates["success"], balance)
-
-        elif feat.command == "DEPOSIT":
-            user_deposit_address = wallet.create_or_fetch_user(message.author.id, message.author.name).wallet_address
-            post_response(message, feat.response_templates["success"], user_deposit_address,
-                          get_qr_url(user_deposit_address))
-
-        elif feat.command == "WITHDRAW":
-            try:
-                address = find_address(message.content)
-                user = wallet.create_or_fetch_user(message.author.id, message.author.name)
-                amount = user.balance
-                if amount < 0.01:
-                    post_response(message, feat.response_templates["threshold"])
-                else:
-                    wallet.make_transaction_to_address(user, amount, address)
-                    post_response(message, feat.response_templates["success"])
-            except util.TipBotException as e:
-                if e.error_type == "address_not_found":
-                    post_response(message, feat.response_templates["address_not_found"])
-                if e.error_type == "error":
-                    post_response(message, feat.response_templates["error"])
-
-        elif feat.command == "TIP":
-            try:
-                amount = find_amount(message.content)
-                target_user_id = find_user_id(message.content)
-                if target_user_id == message.author.id:
-                    post_response(message, feat.response_templates["cant_tip_yourself"])
-                elif target_user_id == BOT_ID:
-                    post_response(message, feat.response_templates["cant_tip_bot"])
-                else:
-                    target_user = await client.get_user_info(target_user_id)
-                    wallet.make_transaction_to_user(message.author.id, amount, target_user.id, target_user.name)
-                    try:
-                        asyncio.get_event_loop().create_task(
-                            post_dm(target_user_id, feat.response_templates["tip_received"], amount, message.author.id))
-                    except Exception as e:
-                        logger.error('could not send message')
-                        logger.exception(e)
-                    post_response(message, feat.response_templates["success"])
-                    if 1 <= amount <= 5:
-                        asyncio.get_event_loop().create_task(react_to_message(message, 1))
-                    elif 5 < amount <= 10:
-                        asyncio.get_event_loop().create_task(react_to_message(message, 2))
-                    elif amount > 10:
-                        asyncio.get_event_loop().create_task(react_to_message(message, 3))
-                    asyncio.get_event_loop().create_task(react_to_message(message, 1))
-            except util.TipBotException as e:
-                if e.error_type == "amount_not_found":
-                    post_response(message, feat.response_templates["amount_not_found"])
-                if e.error_type == "user_not_found":
-                    post_response(message, feat.response_templates["user_not_found"])
-                if e.error_type == "insufficient_funds":
-                    post_response(message, feat.response_templates["insufficient_funds"])
-                if e.error_type == "error":
-                    post_response(message, feat.response_templates["error"])
-
-        elif feat.command == "TOP":
-            top_users = wallet.get_top_users()
-            if len(top_users) == 0:
-                post_response(message, feat.response_templates["empty"])
-            else:
-                response = random.choice(feat.response_templates["header"]) + "\n"
-                for top_user in top_users:
-                    response += '\n %s %.3f PPC tipped by %s' % (util.get_numerical_emoji(top_user['index']),
-                                                                 top_user['amount'], top_user['name'])
-                    if top_user['index'] == 1:
-                        response += ' :clap: :clap: '
-                    elif top_user['index'] == 2:
-                        response += ' :clap: '
-                post_response(message, [response])
-
-    else:
-        post_response(message, general_responses["command_not_found"])
-
-
 def get_qr_url(text):
     return 'https://chart.googleapis.com/chart?cht=qr&chl=%s&chs=180x180&choe=UTF-8&chld=L|2' % text
 
@@ -350,7 +258,6 @@ async def on_ready():
     print('Logged in as')
     print(client.user.name)
     print(client.user.id)
-    print(f"Don't @ me. {AT_BOT}")
     print('------')
 
     logger.info('connected as %s and id %s', client.user.name, client.user.id)
@@ -360,22 +267,120 @@ async def on_ready():
 @client.event
 async def on_message(message):
 
-    # disregard messages sent by the bot
-    if message.author.id == client.user.id:
+    # make sure bot doesnt reply to himself
+    if message.author == client.user:
         return
 
-    if AT_BOT in message.content or isinstance(message.channel, discord.abc.PrivateChannel):
+    try:
+        feat = [f for f in bot_features for c in f.command_keywords if c in message.content][0]
+    except IndexError:
+        pass
 
+    # $help
+    if message.content.startswith('$help'):
+        post_response(message, feat.response_templates["success"], BOT_VERSION)
+
+    # $balance
+    try:
+        if message.content.startswith('$balance') or message.content.startswith('$wallet'):
+            balance = wallet.get_balance(message.author.id)
+
+            post_response(message, feat.response_templates["success"], balance)
+    except socket_error as serr:
+        if serr.errno != errno.ECONNREFUSED:
+            raise serr
+        logger.exception("wallet down !")
+        post_response(message, general_responses["wallet_down"])
+
+    # $deposit
+    try:
+        if message.content.startswith('$deposit'):
+            user_deposit_address = wallet.create_or_fetch_user(message.author.id, message.author.name).wallet_address
+
+            post_response(message, feat.response_templates["success"],
+                          user_deposit_address,
+                          get_qr_url(user_deposit_address))
+    except socket_error as serr:
+        if serr.errno != errno.ECONNREFUSED:
+            raise serr
+        logger.exception("wallet down !")
+        post_response(message, general_responses["wallet_down"])
+
+    # $withdraw
+    try:
+        if message.content.startswith('$withdraw'):
+            try:
+                address = find_address(message.content.split("$withdraw")[1].strip())
+                user = wallet.create_or_fetch_user(message.author.id, message.author.name)
+                amount = user.balance
+                if amount < 0.01:
+                    post_response(message, feat.response_templates["threshold"])
+                else:
+                    wallet.make_transaction_to_address(user, amount, address)
+                    post_response(message, feat.response_templates["success"])
+            except util.TipBotException as e:
+                if e.error_type == "address_not_found":
+                    post_response(message, feat.response_templates["address_not_found"])
+                if e.error_type == "error":
+                    post_response(message, feat.response_templates["error"])
+    except socket_error as serr:
+        if serr.errno != errno.ECONNREFUSED:
+            raise serr
+        logger.exception("wallet down !")
+        post_response(message, general_responses["wallet_down"])
+
+    # $tip
+    if message.content.startswith('$tip'):
         try:
-            if not isinstance(message.channel, discord.abc.PrivateChannel):
-                message.content = message.content.replace(AT_BOT, '', 1)
-            await handle_message(message)
+            amount = find_amount(message.content)
+            target_user_id = find_user_id(message.content)
+            if target_user_id == message.author.id:
+                post_response(message, feat.response_templates["cant_tip_yourself"])
+            elif target_user_id == BOT_ID:
+                post_response(message, feat.response_templates["cant_tip_bot"])
+            else:
+                target_user = await client.fetch_user(target_user_id)
+                wallet.make_transaction_to_user(message.author.id, amount, target_user.id, target_user.name)
+                try:
+                    asyncio.get_event_loop().create_task(
+                        post_dm(target_user_id, feat.response_templates["tip_received"], amount, message.author.id))
+                except Exception as e:
+                    logger.error('could not send message')
+                    logger.exception(e)
+                post_response(message, feat.response_templates["success"])
+                if 1 <= amount <= 5:
+                    asyncio.get_event_loop().create_task(react_to_message(message, 1))
+                elif 5 < amount <= 10:
+                    asyncio.get_event_loop().create_task(react_to_message(message, 2))
+                elif amount > 10:
+                    asyncio.get_event_loop().create_task(react_to_message(message, 3))
+                asyncio.get_event_loop().create_task(react_to_message(message, 1))
+        except util.TipBotException as e:
+            if e.error_type == "amount_not_found":
+                post_response(message, feat.response_templates["amount_not_found"])
+            if e.error_type == "user_not_found":
+                post_response(message, feat.response_templates["user_not_found"])
+            if e.error_type == "insufficient_funds":
+                post_response(message, feat.response_templates["insufficient_funds"])
+            if e.error_type == "error":
+                post_response(message, feat.response_templates["error"])
 
-        except socket_error as serr:
-            if serr.errno != errno.ECONNREFUSED:
-                raise serr
-            logger.exception("wallet down !")
-            post_response(message, general_responses["wallet_down"])
+    # $top
+    if message.content.startswith('$top'):
+
+        top_users = wallet.get_top_users()
+        if len(top_users) == 0:
+            post_response(message, feat.response_templates["empty"])
+        else:
+            response = random.choice(feat.response_templates["header"]) + "\n"
+            for top_user in top_users:
+                response += '\n %s %.3f PPC tipped by %s' % (util.get_numerical_emoji(top_user['index']),
+                                                                top_user['amount'], top_user['name'])
+                if top_user['index'] == 1:
+                    response += ' :clap: :clap: '
+                elif top_user['index'] == 2:
+                    response += ' :clap: '
+            post_response(message, [response])
 
 
 client.run(BOT_TOKEN)
