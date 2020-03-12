@@ -279,8 +279,9 @@ def get_qr_url(text):
     return 'https://chart.googleapis.com/chart?cht=qr&chl=%s&chs=180x180&choe=UTF-8&chld=L|2' % text
 
 
-def find_address(input_text):
-    regex = r'\w{25,34}'
+def find_address(input_text: str) -> str:
+
+    regex = r'[a-km-zA-HJ-NP-Z1-9]{25,34}'
     matches = re.findall(regex, input_text, re.IGNORECASE)
     if len(matches) == 1:
         return matches[0].strip()
