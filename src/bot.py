@@ -330,7 +330,7 @@ async def on_message(message):
         post_response(message, general_responses["wallet_down"])
 
     # $tip
-    if message.content.startswith('$tip'):
+    if message.content.startswith('$tip') or message.content.startswith('$send'):
         try:
             amount = find_amount(message.content)
             target_user_id = find_user_id(message.content)
@@ -366,7 +366,7 @@ async def on_message(message):
                 post_response(message, feat.response_templates["error"])
 
     # $top
-    if message.content.startswith('$top'):
+    if message.content.startswith('$top') or message.content.startswith('$rank') or message.content.startswith('$leaderboard'):
 
         top_users = wallet.get_top_users()
         if len(top_users) == 0:
