@@ -117,7 +117,8 @@ def setup_bot():
                                      "arrive. \n QR: %s",
                                      "Wow :heart_eyes: ! Send your coins to %s and I'll let you know when they " +
                                      "arrive. \n QR: %s"
-                                 ]})
+                                 ], "not_private": ["Can only tell you this in private. :blush:"]
+                                 })
 
     tip_feature = BotFeature(command="TIP",
                              command_keywords=["$send", "$tip"],
@@ -295,11 +296,15 @@ async def on_message(message):
     # $deposit
     try:
         if message.content.startswith('$deposit'):
-            user_deposit_address = wallet.create_or_fetch_user(message.author.id, message.author.name).wallet_address
+            if isinstance(message.channel, discord.abc.PrivateChannel):
+                user_deposit_address = wallet.create_or_fetch_user(message.author.id, message.author.name).wallet_address
 
-            post_response(message, feat.response_templates["success"],
-                          user_deposit_address,
-                          get_qr_url(user_deposit_address))
+                post_response(message, feat.response_templates["success"],
+                              user_deposit_address,
+                              get_qr_url(user_deposit_address))
+            else:
+                post_response(message, feat.response_templates["not_private"])
+
     except socket_error as serr:
         if serr.errno != errno.ECONNREFUSED:
             raise serr
