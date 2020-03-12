@@ -101,9 +101,10 @@ def setup_bot():
                                  response_templates=
                                  {"success": [
                                      "Balance: %.3f PPC",
-                                     "You have %.3f PPC. Spend wisely ! :wink: ",
+                                     "You have %.3f PPC. Spend wisely! :wink:",
                                      "You've got %.3f PPC."
-                                 ]})
+                                 ], "not_private": ["Can only tell you this in private. :blush:"]
+                                 })
 
     deposit_feature = BotFeature(command="DEPOSIT",
                                  command_keywords=["$deposit"],
@@ -284,9 +285,13 @@ async def on_message(message):
     # $balance
     try:
         if message.content.startswith('$balance') or message.content.startswith('$wallet'):
-            balance = wallet.get_balance(message.author.id)
+            if isinstance(message.channel, discord.abc.PrivateChannel):
+                balance = wallet.get_balance(message.author.id)
 
-            post_response(message, feat.response_templates["success"], balance)
+                post_response(message, feat.response_templates["success"], balance)
+            else:
+                post_response(message, feat.response_templates["not_private"])
+
     except socket_error as serr:
         if serr.errno != errno.ECONNREFUSED:
             raise serr
