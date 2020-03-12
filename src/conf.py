@@ -16,7 +16,7 @@ else:
     RPC_PORT = environ.get("RPC_PORT", "9904")
     RPC_USER = environ.get("RPC_USER", "rpc")
     RPC_PASSWORD = environ.get("RPC_PASSWORD", "pass")
-    RPC_HOST = environ.get("RPC_HOST", "")
+    RPC_HOST = environ.get("RPC_HOST", "localhost")
     BOT_ID = environ.get("BOT_ID", "")
     BOT_TOKEN = environ.get("BOT_TOKEN", "")
     DB_NAME = environ.get("DB_NAME", "tippbot.db")
