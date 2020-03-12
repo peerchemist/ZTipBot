@@ -60,8 +60,8 @@ def make_transaction_to_address(user, amount, address):
     commands = [["sendtoaddress", address, round(amount, 6), "tippbot withdraw"]]
     result = rpc_connection.batch_(commands)
     txid = result[0]
-    logger.info('creating withdraw transaction (user: %s, amount: %.3f, address: %s)', user.user_id,
-                amount, address)
+    logger.info('creating withdraw transaction (user: %s, amount: %.3f, address: %s, txid: %s)', user.user_id,
+                amount, address, txid)
     if db.create_withdraw_transaction(txid, amount, user):
         logger.info('withdraw successful.')
         return
