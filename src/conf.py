@@ -1,6 +1,6 @@
 from os import environ
 
-BOT_VERSION = "0.1"
+BOT_VERSION = "0.2"
 DEPOSIT_CHECK_JOB = 60.0  # seconds
 
 if environ.get("APP_ENV") == "docker":
