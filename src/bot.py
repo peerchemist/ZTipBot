@@ -222,7 +222,7 @@ def post_response(message, response_list, *args):
     response = random.choice(response_list) % tuple(args)
 
     if not isinstance(message.channel, discord.abc.PrivateChannel):
-        response = f"<@{message.author.id}>{response}"
+        response = f"<@{message.author.id}> {response}"
 
     logger.info("sending response: '%s' to message: %s", response, message.content)
     asyncio.get_event_loop().create_task(message.channel.send(response))
