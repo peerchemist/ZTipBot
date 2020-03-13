@@ -57,13 +57,13 @@ def make_transaction_to_address(user, amount, address):
 
     rpc_connection = connect()
 
-    result = rpc_connection.sendtoaddress(address, round(amount, 6), "tippbot withdraw")
-    txid = result[0]
+    txid = rpc_connection.sendtoaddress(address, round(amount, 6), "tippbot withdraw")
+
     logger.info('creating withdraw transaction (user: %s, amount: %.3f, address: %s, txid: %s)', user.user_id,
                 amount, address, txid)
     if db.create_withdraw_transaction(txid, amount, user):
         logger.info('withdraw successful.')
-        return
+        return txid
     else:
         raise util.TipBotException("error")
 
