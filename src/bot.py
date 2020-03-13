@@ -101,9 +101,9 @@ def setup_bot():
                                  command_keywords=["$balance", "$wallet"],
                                  response_templates=
                                  {"success": [
-                                     "Balance: %.3f PPC",
-                                     "You have %.3f PPC. Spend wisely! :wink:",
-                                     "You've got %.3f PPC."
+                                     "Balance: %.6f PPC",
+                                     "You have %.6f PPC. Spend wisely! :wink:",
+                                     "You've got %.6f PPC."
                                  ], "not_private": ["Can only tell you this in private, DM me. :blush:"]
                                  })
 
