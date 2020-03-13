@@ -220,11 +220,11 @@ def find_amount(input_text):
         raise util.TipBotException("amount_not_found")
 
 
-def find_user_id(input_text):
+def find_user_id(input_text: str) -> int:
     regex = r'(?:^|\s)<@!?(\w*)>(?=$|\s)'
     matches = re.findall(regex, input_text, re.IGNORECASE)
     if len(matches) == 1:
-        return matches[0].strip()
+        return int(matches[0].strip())
     else:
         raise util.TipBotException("user_not_found")
 
