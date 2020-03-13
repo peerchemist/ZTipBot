@@ -5,6 +5,7 @@ import errno
 from socket import error as socket_error
 import discord
 import asyncio
+from decimal import Decimal
 import logging.handlers
 import wallet
 import util
@@ -149,7 +150,10 @@ def setup_bot():
                              ], "cant_tip_bot": [
                                  ":thinking: :thinking: :thinking: You can't tip me !",
                                  "Thanks ... but I can't accept that :blush: "
-                             ]})
+                             ], "too_many_decimals": 
+                                 ["Due to limited resources I can't do maths beyond 6th decimal, please don't push me."
+                             ]
+                             })
 
     withdraw_feature = BotFeature(command="WITHDRAW",
                                   command_keywords=["$withdraw"],
@@ -203,8 +207,15 @@ def find_address(input_text: str) -> str:
 def find_amount(input_text):
     regex = r'(?:^|\s)(\d*\.?\d+)(?=$|\s)'
     matches = re.findall(regex, input_text, re.IGNORECASE)
+
     if len(matches) == 1:
-        return float(matches[0].strip())
+        try:
+            assert Decimal(matches[0]).as_tuple().exponent >= -6
+            return float(matches[0].strip())
+
+        except AssertionError:
+            raise util.TipBotException("too_many_decimals")
+
     else:
         raise util.TipBotException("amount_not_found")
 
@@ -366,6 +377,7 @@ async def on_message(message):
                 elif amount > 10:
                     asyncio.get_event_loop().create_task(react_to_message(message, 3))
                 asyncio.get_event_loop().create_task(react_to_message(message, 1))
+
         except util.TipBotException as e:
             if e.error_type == "amount_not_found":
                 post_response(message, feat.response_templates["amount_not_found"])
@@ -375,6 +387,8 @@ async def on_message(message):
                 post_response(message, feat.response_templates["insufficient_funds"])
             if e.error_type == "error":
                 post_response(message, feat.response_templates["error"])
+            if e.error_type == "too_many_decimals":
+                post_response(message, feat.response_templates["too_many_decimals"])
 
     # $top
     if message.content.startswith('$top') or message.content.startswith('$rank') or message.content.startswith('$leaderboard'):
