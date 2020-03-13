@@ -291,7 +291,7 @@ async def on_message(message):
         pass
 
     # $help
-    if message.content.startswith('$help'):
+    if message.content.startswith('$help') or message.content.startswith('$man'):
         post_response(message, feat.response_templates["success"], BOT_VERSION)
 
     # $balance
