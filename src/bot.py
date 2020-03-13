@@ -338,8 +338,10 @@ async def on_message(message):
                 if amount < 0.01:
                     post_response(message, feat.response_templates["threshold"])
                 else:
-                    wallet.make_transaction_to_address(user, amount, address)
+                    txid = wallet.make_transaction_to_address(user, amount, address)
                     post_response(message, feat.response_templates["success"])
+                    asyncio.get_event_loop().create_task(message.channel.send(f"Txid: {txid}"))
+
             except util.TipBotException as e:
                 if e.error_type == "address_not_found":
                     post_response(message, feat.response_templates["address_not_found"])
