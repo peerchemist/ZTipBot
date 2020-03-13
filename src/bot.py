@@ -67,8 +67,8 @@ def setup_bot():
                                   "TippBot v%s - tip bot for Discord \n" +
                                   "\n" +
                                   ":small_orange_diamond: You can phrase your commands anyway you like, for example"
-                                  " '$tip 2 PPC to @daniel' and 'I command you to $tip @daniel an amount of 2' are"
-                                  " equal. I'll let you know if I can't find what I'm looking for. \n\n"
+                                  " '$tip 2 PPC to @daniel' and '$tip I command you to send 2 ppc to @daniel' are"
+                                  " equal. Just start the line with command, ie. $tip. I'll let you know if I can't find what I'm looking for. \n\n"
                                   "Supported commands are:\n " +
                                   "\n" +
                                   ":small_blue_diamond: $help $man \n" +
