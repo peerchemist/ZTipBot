@@ -334,7 +334,7 @@ async def on_message(message):
             try:
                 address = find_address(message.content.split("$withdraw")[1].strip())
                 user = wallet.create_or_fetch_user(message.author.id, message.author.name)
-                amount = user.balance
+                amount = find_amount(message.content.split("$withdraw")[1].strip())
                 if amount < 0.01:
                     post_response(message, feat.response_templates["threshold"])
                 else:
