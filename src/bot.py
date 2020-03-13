@@ -105,7 +105,7 @@ def setup_bot():
                                      "Balance: %.3f PPC",
                                      "You have %.3f PPC. Spend wisely! :wink:",
                                      "You've got %.3f PPC."
-                                 ], "not_private": ["Can only tell you this in private. :blush:"]
+                                 ], "not_private": ["Can only tell you this in private, DM me. :blush:"]
                                  })
 
     deposit_feature = BotFeature(command="DEPOSIT",
@@ -120,7 +120,7 @@ def setup_bot():
                                      "arrive. \n QR: %s",
                                      "Wow :heart_eyes: ! Send your coins to %s and I'll let you know when they " +
                                      "arrive. \n QR: %s"
-                                 ], "not_private": ["Can only tell you this in private. :blush:"]
+                                 ], "not_private": ["Can only tell you this in private, DM me. :blush:"]
                                  })
 
     tip_feature = BotFeature(command="TIP",
