@@ -196,7 +196,8 @@ def get_qr_url(text):
 
 def find_address(input_text: str) -> str:
 
-    regex = r'[a-km-zA-HJ-NP-Z1-9]{25,34}'
+    # regex catching all kinds of Peercoin addreses
+    regex = r'(?:(?:tpc|pc)(?:0(?:[ac-hj-np-z02-9]{39}|[ac-hj-np-z02-9]{59})|1[ac-hj-np-z02-9]{8,87})|(?:[Pp]|[mn2])[a-km-zA-HJ-NP-Z1-9]{25,39})'
     matches = re.findall(regex, input_text, re.IGNORECASE)
     if len(matches) == 1:
         return matches[0].strip()
