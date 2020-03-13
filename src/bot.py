@@ -92,7 +92,6 @@ def setup_bot():
                                   ":small_blue_diamond: needs: address, amount \n" +
                                   "Withdraw coins to your wallet. You have to supply an " +
                                   "address and amount for this. \n" +
-                                  "Warning: withdrawing to segwit address is not possible at this moment. \n" +
                                   "\n" +
                                   ":small_blue_diamond: $top $rank $leaderboard \n" +
                                   "Show who has tipped the most. \n"
