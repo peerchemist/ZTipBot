@@ -360,7 +360,7 @@ async def on_message(message):
             target_user_id = find_user_id(message.content)
             if target_user_id == message.author.id:
                 post_response(message, feat.response_templates["cant_tip_yourself"])
-            elif target_user_id == BOT_ID:
+            elif target_user_id == int(BOT_ID):
                 post_response(message, feat.response_templates["cant_tip_bot"])
             else:
                 target_user = await client.fetch_user(target_user_id)
