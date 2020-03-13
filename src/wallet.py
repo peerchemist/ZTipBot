@@ -42,15 +42,15 @@ def create_or_fetch_user(user_id, user_name):
         return user
 
 
-def get_balance(user_id):
+def get_balance(user_id: int) -> float:
     logger.info('getting balance for user %s', user_id)
     user = db.get_user_by_id(user_id)
     if user is None:
         logger.info('user %s does not exist.', user_id)
-        return 0.0
+        return float(0)
     else:
         logger.info('balance for %s fetched successfully.', user_id)
-        return user.balance
+        return float(user.balance)
 
 
 def make_transaction_to_address(user, amount, address):
