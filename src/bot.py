@@ -39,22 +39,22 @@ general_responses = {
         ],
     "new_deposit_unconfirmed":
         [
-            "I received a new deposit (%.3f PPC) :ok_hand: Waiting for 1 more confirmation" +
+            "I received a new deposit (%.6f PPC) :ok_hand: Waiting for 1 more confirmation" +
             " before you can start using the coins. I will let you know when your funds are confirmed.",
-            "I got the %.3f PPC you sent me :ok_hand: Just waiting for a confirmation. " +
+            "I got the %.6f PPC you sent me :ok_hand: Just waiting for a confirmation. " +
             "I'll send you a message when that happens.",
-            "Wow ! I got %.3f PPC from you. Wait a moment so I receive one confirmation. " +
+            "Wow ! I got %.6f PPC from you. Wait a moment so I receive one confirmation. " +
             "I'll tell you when your coins are confirmed."
         ],
     "new_deposit_confirmed":
         [
-            "Your deposit (%.3f PPC) is added and confirmed ! Coins are now usable with your wallet.",
-            "Deposit (%.3f PPC) is now confirmed :sunglasses: ! Tip happily."
+            "Your deposit (%.6f PPC) is added and confirmed ! Coins are now usable with your wallet.",
+            "Deposit (%.6f PPC) is now confirmed :sunglasses: ! Tip happily."
         ],
     "deposit_confirmed":
         [
-            "Your deposit (%.3f PPC) is now confirmed ! :sunglasses:",
-            "Confirmed ! %.3f PPC was added to your account. :muscle:"
+            "Your deposit (%.6f PPC) is now confirmed ! :sunglasses:",
+            "Confirmed ! %.6f PPC was added to your account. :muscle:"
         ]
 }
 
@@ -142,8 +142,8 @@ def setup_bot():
                              ], "error": [
                                  "Something went wrong with the tip. I wrote to logs. :thermometer_face: "
                              ], "tip_received": [
-                                 "You were tipped %.3f by <@%s> ! Your account was funded. :muscle: ",
-                                 "%.3f PPC was tipped to you by <@%s> ! You can tip other users or withdraw your coins."
+                                 "You were tipped %.6f by <@%s> ! Your account was funded. :muscle: ",
+                                 "%.6f PPC was tipped to you by <@%s> ! You can tip other users or withdraw your coins."
                              ], "cant_tip_yourself": [
                                  ":thinking: :thinking: :thinking: You can't tip yourself !"
                              ], "cant_tip_bot": [
@@ -401,7 +401,7 @@ async def on_message(message):
         else:
             response = random.choice(feat.response_templates["header"]) + "\n"
             for top_user in top_users:
-                response += '\n %s %.3f PPC tipped by %s' % (util.get_numerical_emoji(top_user['index']),
+                response += '\n %s %.6f PPC tipped by %s' % (util.get_numerical_emoji(top_user['index']),
                                                                 top_user['amount'], top_user['name'])
                 if top_user['index'] == 1:
                     response += ' :clap: :clap: '
