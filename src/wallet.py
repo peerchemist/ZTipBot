@@ -1,10 +1,10 @@
 from bitcoinrpc.authproxy import AuthServiceProxy
 
-import util
-import db
+from . import util
+from . import db
 import datetime
 import logging
-from conf import (RPC_PORT,
+from .conf import (RPC_PORT,
                   RPC_USER,
                   RPC_PASSWORD,
                   RPC_HOST
@@ -88,12 +88,15 @@ def make_transaction_to_user(user_id, amount, target_user_id, target_user_name):
 def check_balance(user_id, claimed_amount):
     logger.info('checking %s balance for %.3f', user_id, claimed_amount)
     balance = get_balance(user_id)
-    if claimed_amount >= balance:
+    if balance < 0.0:
         logger.info('check balance failed.')
         return False
-    else:
-        logger.info('check balance passed.')
-        return True
+    elif claimed_amount > balance:
+        logger.info('check balance failed.')
+        return False
+
+    logger.info('check balance passed.')
+    return True
 
 
 def parse_incoming_transactions():
