@@ -86,12 +86,17 @@ def make_transaction_to_user(user_id, amount, target_user_id, target_user_name):
 
 
 def check_balance(user_id, claimed_amount):
+    '''Returns True if the user has a sensible balance with at least as much as
+    the claimed amount. Returns False, otherwise.
+    '''
     logger.info('checking %s balance for %.3f', user_id, claimed_amount)
     balance = get_balance(user_id)
+
     if balance < 0.0:
         logger.info('check balance failed.')
         return False
-    elif claimed_amount > balance:
+
+    if claimed_amount > balance:
         logger.info('check balance failed.')
         return False
 
