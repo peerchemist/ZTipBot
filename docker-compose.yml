@@ -23,7 +23,7 @@ services:
       - RPC_PORT=19904
       - RPC_USER=rpc
       - RPC_PASSWORD=pass
-      - DB_NAME=tippbot.sqlite
+      - DB_NAME=/var/lib/tippbot/tippbot.sqlite
     restart: always
     volumes:
         - /opt/tippbot/db:/var/lib/tippbot/
