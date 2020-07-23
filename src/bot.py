@@ -268,11 +268,12 @@ async def check_for_deposit():
 
 @client.event
 async def on_ready():
-    logger.info('connected as %s and id %s', client.user.name, client.user.id)
+    logger.info('Connected as %s and id %s', client.user.name, client.user.id)
+    logger.info(f"Using discord.py version {discord.__version__}")
 
     # Let users know we're watching for commands by setting the bot's activity.
     watching = discord.Activity(type=discord.ActivityType.watching, name='DM me "$help".')
-    await bot.change_presence(activity=watching)
+    await client.change_presence(activity=watching)
 
     asyncio.get_event_loop().create_task(check_for_deposit())
 
