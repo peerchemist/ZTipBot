@@ -1,10 +1,10 @@
 from bitcoinrpc.authproxy import AuthServiceProxy
 
-from . import util
-from . import db
+import util
+import db
 import datetime
 import logging
-from .conf import (RPC_PORT,
+from conf import (RPC_PORT,
                    RPC_USER,
                    RPC_PASSWORD,
                    RPC_HOST
