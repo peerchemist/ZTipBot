@@ -106,7 +106,7 @@ def create_deposit_transaction(wallet_txid, amount, to_user,
                                               status=status,
                                               created=datetime.datetime.now()
                                               )
-            if to_user is not None and status is not 'UNCONFIRMED':
+            if to_user != None and status is not 'UNCONFIRMED':
                 to_user.balance += float(amount)
                 to_user.save()
             deposit_transaction.save()
