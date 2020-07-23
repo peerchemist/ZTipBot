@@ -1,13 +1,13 @@
 from bitcoinrpc.authproxy import AuthServiceProxy
 
-import util
-import db
+from . import util
+from . import db
 import datetime
 import logging
-from conf import (RPC_PORT,
-                  RPC_USER,
-                  RPC_PASSWORD,
-                  RPC_HOST
+from .conf import (RPC_PORT,
+                   RPC_USER,
+                   RPC_PASSWORD,
+                   RPC_HOST
 )
 
 logging.basicConfig(filename='bot.log', level=logging.INFO)
