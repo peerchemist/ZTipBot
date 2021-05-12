@@ -1,7 +1,7 @@
 version: '3.5'
 services:
   peercoind:
-    image: peercoin/peercoind
+    image: peercoin/peercoind:0.10.0
     restart: on-failure:20
     volumes:
         - /opt/tippbot/peercoin/:/data
