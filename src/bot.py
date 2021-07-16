@@ -170,6 +170,8 @@ def setup_bot():
                                       "You do not have a minimum of 0.01 PPC !",
                                       "Minimum withdraw amount is 0.01 PPC !",
                                       "Uh I'm sorry :sweat: ... Minimum withdrawal amount is 0.01 PPC"
+                                  ], "insufficient_funds": [
+                                      "You don't have enough coins to withdraw that much :scream: :scream: "
                                   ]})
 
     top_feature = BotFeature(command="TOP",
@@ -347,6 +349,8 @@ async def on_message(message):
                     post_response(message, feat.response_templates["address_not_found"])
                 if e.error_type == "error":
                     post_response(message, feat.response_templates["error"])
+                if e.error_type == "insufficient_funds":
+                    post_response(message, feat.response_templates["insufficient_funds"])
     except socket_error as serr:
         if serr.errno != errno.ECONNREFUSED:
             raise serr

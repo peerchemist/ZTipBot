@@ -54,6 +54,8 @@ def get_balance(user_id: int) -> float:
 
 
 def make_transaction_to_address(user, amount, address):
+    if not check_balance(user_id, amount):
+        raise util.TipBotException("insufficient_funds")
 
     rpc_connection = connect()
 
