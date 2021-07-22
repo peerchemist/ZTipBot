@@ -5,15 +5,14 @@ import errno
 from socket import error as socket_error
 import discord
 import asyncio
-from decimal import Decimal
 import logging.handlers
-import wallet
-import util
+from . import wallet
+from . import util
 
-from conf import (BOT_VERSION,
-                  DEPOSIT_CHECK_JOB,
-                  BOT_ID,
-                  BOT_TOKEN
+from .conf import (BOT_VERSION,
+                   DEPOSIT_CHECK_JOB,
+                   BOT_ID,
+                   BOT_TOKEN,
 )
 
 logging.basicConfig(filename='bot.log', level=logging.INFO)
@@ -206,22 +205,6 @@ def find_address(input_text: str) -> str:
         raise util.TipBotException("address_not_found")
 
 
-def find_amount(input_text):
-    regex = r'(?:^|\s)(\d*\.?\d+)(?=$|\s)'
-    matches = re.findall(regex, input_text, re.IGNORECASE)
-
-    if len(matches) == 1:
-        try:
-            assert Decimal(matches[0]).as_tuple().exponent >= -6
-            return float(matches[0].strip())
-
-        except AssertionError:
-            raise util.TipBotException("too_many_decimals")
-
-    else:
-        raise util.TipBotException("amount_not_found")
-
-
 def find_user_id(input_text: str) -> int:
     regex = r'(?:^|\s)<@!?(\w*)>(?=$|\s)'
     matches = re.findall(regex, input_text, re.IGNORECASE)
@@ -336,7 +319,7 @@ async def on_message(message):
             try:
                 address = find_address(message.content.split("$withdraw")[1].strip())
                 user = wallet.create_or_fetch_user(message.author.id, message.author.name)
-                amount = find_amount(message.content.split("$withdraw")[1].strip())
+                amount = util.find_amount(message.content.split("$withdraw")[1].strip())
                 if amount < 0.01:
                     post_response(message, feat.response_templates["threshold"])
                 else:
@@ -360,7 +343,7 @@ async def on_message(message):
     # $tip
     if message.content.startswith('$tip') or message.content.startswith('$send'):
         try:
-            amount = find_amount(message.content)
+            amount = util.find_amount(message.content)
             target_user_id = find_user_id(message.content)
             if target_user_id == message.author.id:
                 post_response(message, feat.response_templates["cant_tip_yourself"])

@@ -1,5 +1,7 @@
+from decimal import Decimal
 import logging
 import logging.handlers
+import re
 
 
 class TipBotException(Exception):
@@ -9,6 +11,22 @@ class TipBotException(Exception):
 
     def __str__(self):
         return repr(self.error_type)
+
+
+def find_amount(input_text):
+    regex = r'(?:^|\s)(\d*\.?\d+)(?=$|\s)'
+    matches = re.findall(regex, input_text, re.IGNORECASE)
+
+    if len(matches) == 1:
+        try:
+            assert Decimal(matches[0]).as_tuple().exponent >= -6
+            return float(matches[0].strip())
+
+        except AssertionError:
+            raise TipBotException("too_many_decimals")
+
+    else:
+        raise TipBotException("amount_not_found")
 
 
 def get_logger(name):

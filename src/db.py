@@ -8,7 +8,7 @@ from peewee import (SqliteDatabase,
                     DateField
 )
 
-from conf import DB_NAME
+from .conf import DB_NAME
 
 db = SqliteDatabase(DB_NAME)
 
