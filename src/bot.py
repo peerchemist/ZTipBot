@@ -13,6 +13,7 @@ from .conf import (BOT_VERSION,
                    DEPOSIT_CHECK_JOB,
                    BOT_ID,
                    BOT_TOKEN,
+                   FOUNDATION_ADDR
 )
 
 logging.basicConfig(filename='bot.log', level=logging.INFO)
@@ -194,17 +195,6 @@ def get_qr_url(text):
     return 'https://chart.googleapis.com/chart?cht=qr&chl=%s&chs=180x180&choe=UTF-8&chld=L|2' % text
 
 
-def find_address(input_text: str) -> str:
-
-    # regex catching all kinds of Peercoin addreses
-    regex = r'(?:(?:tpc|pc)(?:0(?:[ac-hj-np-z02-9]{39}|[ac-hj-np-z02-9]{59})|1[ac-hj-np-z02-9]{8,87})|(?:[Pp]|[mn2])[a-km-zA-HJ-NP-Z1-9]{25,39})'
-    matches = re.findall(regex, input_text, re.IGNORECASE)
-    if len(matches) == 1:
-        return matches[0].strip()
-    else:
-        raise util.TipBotException("address_not_found")
-
-
 def find_user_id(input_text: str) -> int:
     regex = r'(?:^|\s)<@!?(\w*)>(?=$|\s)'
     matches = re.findall(regex, input_text, re.IGNORECASE)
@@ -317,7 +307,7 @@ async def on_message(message):
     try:
         if message.content.startswith('$withdraw'):
             try:
-                address = find_address(message.content.split("$withdraw")[1].strip())
+                address = util.find_address(message.content.split("$withdraw")[1].strip())
                 user = wallet.create_or_fetch_user(message.author.id, message.author.name)
                 amount = util.find_amount(message.content.split("$withdraw")[1].strip())
                 if amount < 0.01:

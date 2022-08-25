@@ -3,6 +3,8 @@ import logging
 import logging.handlers
 import re
 
+from .conf import FOUNDATION_ADDR
+
 
 class TipBotException(Exception):
     def __init__(self, error_type):
@@ -27,6 +29,21 @@ def find_amount(input_text):
 
     else:
         raise TipBotException("amount_not_found")
+
+
+def find_address(input_text: str) -> str:
+
+    # first check out if the tip goes to the foundation
+    if "foundation" in input_text.lower():
+        return FOUNDATION_ADDR
+
+    # regex catching all kinds of Peercoin addreses
+    regex = r'(?:(?:tpc|pc)(?:0(?:[ac-hj-np-z02-9]{39}|[ac-hj-np-z02-9]{59})|1[ac-hj-np-z02-9]{8,87})|(?:[Pp]|[mn2])[a-km-zA-HJ-NP-Z1-9]{25,39})'
+    matches = re.findall(regex, input_text, re.IGNORECASE)
+    if len(matches) == 1:
+        return matches[0].strip()
+    else:
+        raise TipBotException("address_not_found")
 
 
 def get_logger(name):
