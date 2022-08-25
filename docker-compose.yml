@@ -25,6 +25,7 @@ services:
       - RPC_USER=rpc
       - RPC_PASSWORD=pass
       - DB_NAME=/var/lib/tippbot/tippbot.sqlite
+      - FOUNDATION_ADDR=p92W3t7YkKfQEPDb7cG9jQ6iMh7cpKLvwK
     restart: always
     volumes:
         - /opt/tippbot/db:/var/lib/tippbot/

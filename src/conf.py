@@ -1,6 +1,6 @@
 from os import environ
 
-BOT_VERSION = "0.4"
+BOT_VERSION = "0.5"
 DEPOSIT_CHECK_JOB = 60.0  # seconds
 
 if environ.get("APP_ENV") == "docker":
@@ -11,6 +11,7 @@ if environ.get("APP_ENV") == "docker":
     BOT_ID = environ.get("BOT_ID", "")
     BOT_TOKEN = environ.get("BOT_TOKEN", "")
     DB_NAME = environ.get("DB_NAME", "/var/lib/tippbot/tippbot.db")
+    FOUNDATION_ADDR = environ.get("FOUNDATION_ADDR", "")
 
 else:
     RPC_PORT = environ.get("RPC_PORT", "9904")
@@ -20,3 +21,4 @@ else:
     BOT_ID = environ.get("BOT_ID", "")
     BOT_TOKEN = environ.get("BOT_TOKEN", "")
     DB_NAME = environ.get("DB_NAME", "tippbot.db")
+    FOUNDATION_ADDR = environ.get("FOUNDATION_ADDR", "p92W3t7YkKfQEPDb7cG9jQ6iMh7cpKLvwK")
