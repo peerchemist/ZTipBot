@@ -3,7 +3,7 @@ import logging
 import logging.handlers
 import re
 
-from .conf import FOUNDATION_ADDR
+from conf import FOUNDATION_ADDR
 
 
 class TipBotException(Exception):

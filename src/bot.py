@@ -6,10 +6,10 @@ from socket import error as socket_error
 import discord
 import asyncio
 import logging.handlers
-from . import wallet
-from . import util
+import wallet
+import util
 
-from .conf import (BOT_VERSION,
+from conf import (BOT_VERSION,
                    DEPOSIT_CHECK_JOB,
                    BOT_ID,
                    BOT_TOKEN,

@@ -1,10 +1,10 @@
 from bitcoinrpc.authproxy import AuthServiceProxy
 
-from . import util
-from . import db
+import util
+import db
 import datetime
 import logging
-from .conf import (RPC_PORT,
+from conf import (RPC_PORT,
                    RPC_USER,
                    RPC_PASSWORD,
                    RPC_HOST
@@ -54,7 +54,7 @@ def get_balance(user_id: int) -> float:
 
 
 def make_transaction_to_address(user, amount, address):
-    if not check_balance(user_id, amount):
+    if not check_balance(user.user_id, amount):
         raise util.TipBotException("insufficient_funds")
 
     rpc_connection = connect()
