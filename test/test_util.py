@@ -18,3 +18,4 @@ def test_find_address():
 
     assert util.find_address("$tip FouNdAtiOn 10 ppc") == "p92W3t7YkKfQEPDb7cG9jQ6iMh7cpKLvwK"
     assert util.find_address("$withdraw PBGM16nDjX4x8NXrdKHDk1gsAndVHzh3fv 10") == "PBGM16nDjX4x8NXrdKHDk1gsAndVHzh3fv"
+    assert util.find_address("$withdraw pc1qzv4xpgjhdqjmj36qcpmz94k2q2ahzx3qtzeava 1") == "pc1qzv4xpgjhdqjmj36qcpmz94k2q2ahzx3qtzeava"
