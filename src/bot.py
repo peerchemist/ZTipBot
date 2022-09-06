@@ -6,10 +6,10 @@ from socket import error as socket_error
 import discord
 import asyncio
 import logging.handlers
-from . import wallet
-from . import util
+import wallet
+import util
 
-from .conf import (BOT_VERSION,
+from conf import (BOT_VERSION,
                    DEPOSIT_CHECK_JOB,
                    BOT_ID,
                    BOT_TOKEN,
@@ -21,7 +21,8 @@ logging.basicConfig(filename='bot.log', level=logging.INFO)
 logger = logging.getLogger("bot-main")
 
 logger.info("started.")
-client = discord.Client()
+intents = discord.Intents(messages=True, message_content=True)
+client = discord.Client(intents=intents)
 
 BotFeature = collections.namedtuple('BotFeature', ['command', 'command_keywords', 'response_templates'])
 
